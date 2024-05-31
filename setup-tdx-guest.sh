@@ -47,6 +47,7 @@ if [ -n "${KERNEL_RELEASE}" ]; then
 fi
 
 KERNEL_RELEASE=$(get_kernel_version "$KERNEL_TYPE")
+
 # select the right kernel for next boot
 grub_set_kernel
 

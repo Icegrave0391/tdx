@@ -29,29 +29,35 @@ set -e
 SSH_PORT=10022
 PROCESS_NAME=td
 
-# -no-reboot \ # Chuqi: I add this option?
+# -no-reboot \ # Chuqi: I must add this option?
 # -daemonize
 
 stty intr ^]
 
 # approach 1 : talk to QGS directly
 QUOTE_ARGS="-device vhost-vsock-pci,guest-cid=3"
+
+# ${QUOTE_ARGS} \
+
 qemu-system-x86_64 -D /tmp/tdx-guest-td.log \
 		   -accel kvm \
-		   -m 2G -smp 16 \
+		   -m 8G -smp 16 \
 		   -name ${PROCESS_NAME},process=${PROCESS_NAME},debug-threads=on \
 		   -cpu host \
-		   -object tdx-guest,id=tdx \
-		   -machine q35,kernel_irqchip=split,confidential-guest-support=tdx,hpet=off \
+		   -machine q35,kernel_irqchip=split,hpet=off \
 		   -bios ${TDVF_FIRMWARE} \
-		   -nographic -daemonize\
+		   -nographic \
 		   -nodefaults \
 		   -no-reboot \
 		   -device virtio-net-pci,netdev=nic0_td -netdev user,id=nic0_td,hostfwd=tcp::${SSH_PORT}-:22 \
 		   -drive file=${TD_IMG},if=none,id=virtio-disk0 \
 		   -device virtio-blk-pci,drive=virtio-disk0 \
-		   ${QUOTE_ARGS} \
-		   -pidfile /tmp/tdx-demo-td-pid.pid
+		   -pidfile /tmp/tdx-demo-td-pid.pid \
+		   -chardev file,id=bios,path=./bios.log \
+		   -device isa-debugcon,iobase=0x402,chardev=bios \
+		   -serial mon:stdio
+
+stty intr ^c
 
 PID_TD=$(cat /tmp/tdx-demo-td-pid.pid)
 

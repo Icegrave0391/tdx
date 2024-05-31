@@ -43,6 +43,10 @@ TDX_SETUP_INTEL_KERNEL=0
 OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/releases/noble/release/"
 CLOUD_IMG="ubuntu-24.04-server-cloudimg-amd64.img"
 
+# Let's use ENCOS's Ubuntu-22.04
+#OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/releases/jammy/release/"
+#CLOUD_IMG="ubuntu-22.04-server-cloudimg-amd64.img"
+
 ################################################################
 # Configure the guest credentials
 ################################################################
