@@ -37,9 +37,9 @@ PROCESS_NAME=td
 QUOTE_ARGS="-device vhost-vsock-pci,guest-cid=3"
 qemu-system-x86_64 -D /tmp/tdx-guest-td.log \
 		   -accel kvm \
-		   -m 2G -smp 16 \
+		   -m 16G -smp 16 \
 		   -name ${PROCESS_NAME},process=${PROCESS_NAME},debug-threads=on \
-		   -cpu host \
+		   -cpu host,-pdpe1gb \
 		   -object tdx-guest,id=tdx \
 		   -machine q35,kernel_irqchip=split,confidential-guest-support=tdx,hpet=off \
 		   -bios ${TDVF_FIRMWARE} \
